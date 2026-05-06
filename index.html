@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,322 +6,466 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prose Support</title>
     <style>
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
         :root {
-            --primary: #5865F2;
-            --primary-dark: #4752C4;
-            --bg-light: #F5F7FA;
-            --bg-light-accent: #E8EDF5;
-            --bg-dark: #0A0A0A;
-            --bg-dark-accent: #1A1A2E;
-            --text-light: #2D3561;
-            --text-dark: #E0E0E0;
-            --border-light: rgba(45, 53, 97, 0.1);
-            --border-dark: rgba(255, 255, 255, 0.1);
-            --success: #00D084;
-            --spacing: 16px;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            line-height: 1.6;
-            background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-light-accent) 100%);
-            color: var(--text-light);
-            min-height: 100vh;
+            --bg: #f5f5f7;
+            --bg-elevated: #ffffff;
+            --text: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --text-tertiary: #86868b;
+            --border: rgba(0, 0, 0, 0.08);
+            --border-strong: rgba(0, 0, 0, 0.12);
+            --accent: #0071e3;
+            --accent-hover: #0077ed;
+            --accent-soft: rgba(0, 113, 227, 0.08);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.06), 0 20px 48px rgba(0, 0, 0, 0.08);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         body.dark-mode {
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-dark-accent) 100%);
-            color: var(--text-dark);
+            --bg: #000000;
+            --bg-elevated: #1c1c1e;
+            --text: #f5f5f7;
+            --text-secondary: #a1a1a6;
+            --text-tertiary: #86868b;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-strong: rgba(255, 255, 255, 0.14);
+            --accent: #0a84ff;
+            --accent-hover: #1a8fff;
+            --accent-soft: rgba(10, 132, 255, 0.14);
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 2px 6px rgba(0, 0, 0, 0.4), 0 20px 48px rgba(0, 0, 0, 0.4);
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            font-feature-settings: "kern", "liga", "calt";
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+            transition: background-color 0.4s var(--ease), color 0.4s var(--ease);
         }
 
         .container {
-            max-width: 900px;
+            max-width: 760px;
             margin: 0 auto;
-            padding: 0 var(--spacing);
+            padding: 0 24px;
         }
 
         /* Header */
         header {
-            padding: 60px 0 40px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-light);
             position: sticky;
             top: 0;
-            background: rgba(245, 247, 250, 0.95);
-            backdrop-filter: blur(10px);
             z-index: 100;
+            background: rgba(245, 245, 247, 0.72);
+            backdrop-filter: saturate(180%) blur(24px);
+            -webkit-backdrop-filter: saturate(180%) blur(24px);
+            border-bottom: 1px solid var(--border);
+            transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease);
         }
 
         body.dark-mode header {
-            background: rgba(10, 10, 10, 0.95);
-            border-bottom-color: var(--border-dark);
+            background: rgba(0, 0, 0, 0.72);
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            padding: 18px 0;
         }
 
-        h1 {
-            font-size: 32px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, #7289DA 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 0;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .brand-mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .brand-name {
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            color: var(--text);
+        }
+
+        .brand-tag {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 0.02em;
         }
 
         .theme-toggle {
-            background: white;
-            border: 1px solid var(--border-light);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            width: 36px;
+            height: 36px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 18px;
-        }
-
-        body.dark-mode .theme-toggle {
-            background: #1A1A2E;
-            border-color: var(--border-dark);
+            font-size: 15px;
+            color: var(--text);
+            transition: all 0.2s var(--ease);
         }
 
         .theme-toggle:hover {
-            transform: scale(1.1);
+            background: var(--bg-elevated);
+            border-color: var(--border-strong);
+            transform: scale(1.04);
         }
 
-        .subtitle {
-            color: #7F8BA8;
-            font-size: 16px;
+        .theme-toggle:active {
+            transform: scale(0.96);
         }
 
-        body.dark-mode .subtitle {
-            color: #A0A8B8;
+        /* Hero */
+        .hero {
+            padding: 96px 0 56px;
+            text-align: center;
         }
 
-        /* Main Content */
+        .eyebrow {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            padding: 6px 12px;
+            background: var(--accent-soft);
+            border-radius: 999px;
+        }
+
+        h1 {
+            font-size: clamp(40px, 6vw, 56px);
+            font-weight: 600;
+            letter-spacing: -0.025em;
+            line-height: 1.05;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            letter-spacing: -0.01em;
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.4;
+        }
+
+        /* Main */
         main {
-            padding: 60px 0;
+            padding: 32px 0 80px;
+            animation: fadeUp 0.7s var(--ease) both;
         }
 
-        /* FAQ Section */
-        .faq-container {
-            margin-bottom: 60px;
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-tertiary);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
         }
 
         .section-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 600;
-            margin-bottom: 30px;
-            color: var(--text-light);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            color: var(--text);
+            margin-bottom: 32px;
         }
 
-        body.dark-mode .section-title {
-            color: var(--text-dark);
+        /* FAQ */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 80px;
         }
 
         .faq-item {
-            background: white;
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            margin-bottom: 16px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
             overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        body.dark-mode .faq-item {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--border-dark);
+            transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
         }
 
         .faq-item:hover {
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.15);
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-sm);
         }
 
-        body.dark-mode .faq-item:hover {
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.25);
+        .faq-item.active {
+            border-color: var(--border-strong);
+            box-shadow: var(--shadow-md);
         }
 
         .faq-question {
-            padding: 20px;
+            padding: 20px 24px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 20px;
+            font-size: 17px;
             font-weight: 500;
+            letter-spacing: -0.01em;
+            color: var(--text);
             user-select: none;
-            transition: all 0.3s ease;
+            transition: color 0.2s var(--ease);
         }
 
         .faq-question:hover {
-            background: rgba(88, 101, 242, 0.05);
-        }
-
-        body.dark-mode .faq-question:hover {
-            background: rgba(88, 101, 242, 0.1);
+            color: var(--accent);
         }
 
         .faq-icon {
-            font-size: 20px;
-            transition: transform 0.3s ease;
-            color: var(--primary);
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s var(--ease), background-color 0.2s var(--ease);
+        }
+
+        .faq-icon svg {
+            width: 12px;
+            height: 12px;
         }
 
         .faq-item.active .faq-icon {
-            transform: rotate(180deg);
+            transform: rotate(45deg);
         }
 
         .faq-answer {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            background: rgba(88, 101, 242, 0.03);
-            color: #555;
-        }
-
-        body.dark-mode .faq-answer {
-            background: rgba(88, 101, 242, 0.08);
-            color: #CCC;
+            transition: max-height 0.4s var(--ease);
         }
 
         .faq-item.active .faq-answer {
-            max-height: 500px;
-            padding: 0 20px 20px 20px;
+            max-height: 600px;
         }
 
-        .faq-answer p {
+        .faq-answer-inner {
+            padding: 0 24px 24px 24px;
+            font-size: 16px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+        }
+
+        .faq-answer-inner p {
             margin: 0;
-            line-height: 1.7;
         }
 
-        /* Support Section */
+        /* Support CTA */
         .support-container {
-            background: white;
-            border: 1px solid var(--border-light);
-            border-radius: 16px;
-            padding: 40px;
+            position: relative;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 64px 40px;
             text-align: center;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
         }
 
-        body.dark-mode .support-container {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--border-dark);
+        .support-container::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-soft) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .support-container > * {
+            position: relative;
+        }
+
+        .support-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #0071e3 0%, #6a5af9 100%);
+            color: white;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(0, 113, 227, 0.25);
+        }
+
+        .support-icon svg {
+            width: 24px;
+            height: 24px;
         }
 
         .support-container h2 {
-            font-size: 24px;
-            margin-bottom: 16px;
-            color: var(--text-light);
-        }
-
-        body.dark-mode .support-container h2 {
-            color: var(--text-dark);
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            color: var(--text);
+            margin-bottom: 12px;
         }
 
         .support-container p {
-            color: #7F8BA8;
-            margin-bottom: 30px;
-            font-size: 16px;
-        }
-
-        body.dark-mode .support-container p {
-            color: #A0A8B8;
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 480px;
+            margin: 0 auto 32px;
+            line-height: 1.5;
         }
 
         .email-link {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            background: linear-gradient(135deg, var(--primary) 0%, #7289DA 100%);
+            gap: 8px;
+            background: var(--accent);
             color: white;
-            padding: 14px 32px;
-            border-radius: 10px;
+            padding: 13px 24px;
+            border-radius: 999px;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            transition: all 0.2s var(--ease);
         }
 
         .email-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0, 113, 227, 0.3);
         }
 
         .email-link:active {
-            transform: translateY(0);
+            transform: translateY(0) scale(0.98);
         }
 
         /* Footer */
         footer {
-            text-align: center;
+            border-top: 1px solid var(--border);
             padding: 40px 0;
-            border-top: 1px solid var(--border-light);
-            color: #A0A8B8;
-            font-size: 14px;
-        }
-
-        body.dark-mode footer {
-            border-top-color: var(--border-dark);
-            color: #888;
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 13px;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            h1 {
+        @media screen and (max-width: 720px) {
+            .hero {
+                padding: 64px 0 40px;
+            }
+            .section-title {
                 font-size: 24px;
             }
-
-            .section-title {
-                font-size: 20px;
-            }
-
             .support-container {
-                padding: 30px;
+                padding: 48px 24px;
             }
-
+            .support-container h2 {
+                font-size: 26px;
+            }
             .faq-question {
-                padding: 16px;
+                padding: 18px 20px;
+                font-size: 16px;
             }
-
-            .header-content {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .theme-toggle {
-                align-self: flex-end;
+            .faq-answer-inner {
+                padding: 0 20px 20px 20px;
+                font-size: 15px;
             }
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+        /* Print */
+        @media print {
+            body {
+                margin: 0;
+                padding: 0.4in 0.6in;
+                background: #fff;
+                color: #000;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            header, footer, .theme-toggle {
+                display: none !important;
             }
-        }
-
-        main {
-            animation: fadeIn 0.6s ease-out;
+            .container {
+                max-width: 100% !important;
+            }
+            .faq-item {
+                break-inside: avoid;
+                border: 1px solid rgba(0,0,0,0.15);
+                box-shadow: none !important;
+                margin-bottom: 10px;
+            }
+            .faq-answer {
+                max-height: none !important;
+            }
+            .faq-answer-inner {
+                padding: 0 24px 20px 24px !important;
+            }
+            .support-container {
+                break-inside: avoid;
+                box-shadow: none !important;
+                border: 1px solid rgba(0,0,0,0.15);
+            }
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
         }
     </style>
 </head>
@@ -328,9 +473,12 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <div>
-                    <h1>Prose</h1>
-                    <p class="subtitle">Support & FAQ</p>
+                <div class="brand">
+                    <img src="https://raw.githubusercontent.com/TanvirNH/prose-support-/main/1024-mac.png" alt="Prose" class="brand-mark">
+                    <div class="brand-text">
+                        <span class="brand-name">Prose</span>
+                        <span class="brand-tag">Support</span>
+                    </div>
                 </div>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
             </div>
@@ -338,129 +486,183 @@
     </header>
 
     <main>
+        <section class="hero">
+            <div class="container">
+                <span class="eyebrow">Support &amp; FAQ</span>
+                <h1>How can we help?</h1>
+                <p class="hero-subtitle">Everything you need to know about writing in Prose — answered.</p>
+            </div>
+        </section>
+
         <div class="container">
             <!-- FAQ Section -->
             <section class="faq-container">
-                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="section-label">Frequently Asked</div>
+                <h2 class="section-title">Quick answers to common questions</h2>
 
-                <!-- FAQ Item 1 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>How do I create a new document?</span>
-                        <span class="faq-icon">▼</span>
+                <div class="faq-list">
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I create a new document?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Click the "+" button in the top-right corner of the app. A dialog will appear asking for your document title. Enter a name and click "Create" to start a new document. You can also use the keyboard shortcut ⌘N.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>Click the "+" button in the top-right corner of the app. A dialog will appear asking for your document title. Enter a name and click "Create" to start a new document. You can also use the keyboard shortcut ⌘N.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 2 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Where are my documents stored?</span>
-                        <span class="faq-icon">▼</span>
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Where are my documents stored?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>All your documents are stored securely on your Mac using Core Data. We don't use any cloud services, and your data never leaves your computer. This means your writing is completely private and accessible offline.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>All your documents are stored securely on your Mac using Core Data. We don't use any cloud services, and your data never leaves your computer. This means your writing is completely private and accessible offline.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 3 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>How do I export my documents?</span>
-                        <span class="faq-icon">▼</span>
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I export my documents?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Open any document and click the export button (arrow pointing down) in the top-right of the editor. Choose a location on your Mac, and your document will be saved as a .txt file with your chosen name.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>Open any document and click the export button (arrow pointing down) in the top-right of the editor. Choose a location on your Mac, and your document will be saved as a .txt file with your chosen name.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 4 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Can I import existing text files?</span>
-                        <span class="faq-icon">▼</span>
+                    <!-- FAQ Item 4 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I import existing text files?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Yes! Click the import button (arrow pointing up) in the top-right corner of the sidebar. Select one or more .txt files from your Mac, and they'll be imported into Prose. The filename will automatically become your document title.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>Yes! Click the import button (arrow pointing up) in the top-right corner of the sidebar. Select one or more .txt files from your Mac, and they'll be imported into Prose. The filename will automatically become your document title.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 5 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>How often does Prose auto-save my work?</span>
-                        <span class="faq-icon">▼</span>
+                    <!-- FAQ Item 5 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How often does Prose auto-save my work?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Prose automatically saves your documents every 2 seconds as you type. You'll see a "Saving..." indicator in the editor, which changes to "Saved" when complete. You'll never lose your work, even if the app closes unexpectedly.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>Prose automatically saves your documents every 2 seconds as you type. You'll see a "Saving..." indicator in the editor, which changes to "Saved" when complete. You'll never lose your work, even if the app closes unexpectedly.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 6 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Can I search my documents?</span>
-                        <span class="faq-icon">▼</span>
+                    <!-- FAQ Item 6 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I search my documents?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Yes! Use the search bar at the top of the sidebar to search by document title or content. Results update instantly as you type, making it easy to find the document you're looking for.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>Yes! Use the search bar at the top of the sidebar to search by document title or content. Results update instantly as you type, making it easy to find the document you're looking for.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 7 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Does Prose have dark mode?</span>
-                        <span class="faq-icon">▼</span>
+                    <!-- FAQ Item 7 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Does Prose have dark mode?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>Absolutely! Click the sun/moon icon in the top-right corner to toggle between light and dark modes. Your preference is remembered between sessions, so Prose will open in your preferred theme next time.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>Absolutely! Click the sun/moon icon in the top-right corner to toggle between light and dark modes. Your preference is remembered between sessions, so Prose will open in your preferred theme next time.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 8 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>What are the word count, character count, and line count features?</span>
-                        <span class="faq-icon">▼</span>
+                    <!-- FAQ Item 8 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What are the word count, character count, and line count features?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>At the bottom of the editor, you'll see live statistics: the number of lines in your document, total word count, and total character count. These update in real-time as you type, helping you track your writing progress.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>At the bottom of the editor, you'll see live statistics: the number of lines in your document, total word count, and total character count. These update in real-time as you type, helping you track your writing progress.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 9 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Is there a cost or subscription?</span>
-                        <span class="faq-icon">▼</span>
+                    <!-- FAQ Item 9 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Is there a cost or subscription?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>No! Prose is a one-time purchase with no subscriptions, no in-app purchases, and no hidden costs. Once you own it, you own it forever with all features included.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="faq-answer">
-                        <p>No! Prose is a one-time purchase with no subscriptions, no in-app purchases, and no hidden costs. Once you own it, you own it forever with all features included.</p>
-                    </div>
-                </div>
 
-                <!-- FAQ Item 10 -->
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <span>Does Prose collect my data or track my activity?</span>
-                        <span class="faq-icon">▼</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>No. Prose respects your privacy completely. We don't collect any data, track your activity, use analytics, or share any information. Everything stays on your Mac.</p>
+                    <!-- FAQ Item 10 -->
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Does Prose collect my data or track my activity?</span>
+                            <span class="faq-icon" aria-hidden="true">
+                                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 1v10M1 6h10"/></svg>
+                            </span>
+                        </div>
+                        <div class="faq-answer">
+                            <div class="faq-answer-inner">
+                                <p>No. Prose respects your privacy completely. We don't collect any data, track your activity, use analytics, or share any information. Everything stays on your Mac.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Support Section -->
+            <!-- Support CTA -->
             <section class="support-container">
-                <h2>Still Need Help?</h2>
+                <div class="support-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/><path d="m2 8 10 6 10-6"/></svg>
+                </div>
+                <h2>Still need help?</h2>
                 <p>Can't find the answer you're looking for? We're here to help. Send us an email with your question or feedback.</p>
                 <a href="mailto:tanvir4talk+appsupport@gmail.com" class="email-link">
-                    <span>✉️</span>
-                    <span>Contact Support</span>
+                    Contact Support
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h8M7 3l4 4-4 4"/></svg>
                 </a>
             </section>
         </div>
@@ -468,7 +670,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2026 Tanvir N Hasan. All rights reserved.</p>
+            <p>&copy; 2026 Tanvir N Hasan &middot; Prose</p>
         </div>
     </footer>
 
@@ -478,7 +680,6 @@
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const savedTheme = localStorage.getItem('theme');
 
-        // Set initial theme
         if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
             document.body.classList.add('dark-mode');
             themeToggle.textContent = '☀️';
@@ -491,26 +692,33 @@
             themeToggle.textContent = isDark ? '☀️' : '🌙';
         });
 
-        // FAQ accordion functionality
+        // FAQ accordion
         document.querySelectorAll('.faq-question').forEach(question => {
             question.addEventListener('click', () => {
                 const faqItem = question.closest('.faq-item');
                 const isActive = faqItem.classList.contains('active');
-
-                // Close all other items
-                document.querySelectorAll('.faq-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-
-                // Toggle current item
-                if (!isActive) {
-                    faqItem.classList.add('active');
-                }
+                document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('active'));
+                if (!isActive) faqItem.classList.add('active');
             });
         });
 
         // Open first FAQ item by default
         document.querySelector('.faq-item').classList.add('active');
+
+        // PDF export support
+        if (window.GleanBridge) {
+            window.GleanBridge.postMessage({
+                actionId: 'export-pdf',
+                type: 'glean-add-menu',
+                metadata: { label: 'Export as PDF', icon: 'export' }
+            });
+            window.GleanBridge.onMessage('action', function(data) {
+                if (data.actionId === 'export-pdf') {
+                    document.querySelectorAll('.faq-item').forEach(i => i.classList.add('active'));
+                    window.print();
+                }
+            });
+        }
     </script>
 </body>
 </html>
